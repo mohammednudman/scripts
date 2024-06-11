@@ -1,92 +1,74 @@
-import json
 import re
+import json
 
-def parse_order_event(event):
-    attrs_pattern = re.compile(
-        r'(?P<key>\w+):\s*"(?P<value>.*?)"'
-        r'|(?P<key2>\w+):\s*(?P<value2>\d+\.\d+|\d+)'
-        r'|(?P<key3>\w+):\s*null'
-    )
+default_values = {
+    "RootOrderID": "",
+    "ClordID": "",
+    "OrigClordID": "",
+    "Instance": "LCETEST01",
+    "SourceSysCode": "",
+    "TraderID": "",
+    "Region": "",
+    "TradeDate": "",
+    "Trader_Location": "",
+    "Booking_ID": "",
+    "DeskID": "",
+    "BookingLegalEntityID": "",
+    "OrderQty": 0,
+    "Instrument": "",
+    "Price": 0.0,
+    "Side": "",
+    "Instrument_Type": "",
+    "Product": "",
+    "OrdType": "",
+    "Capacity": "",
+    "TimeInForce": "",
+    "FlowType": "",
+    "Country": "",
+    "Currency": "",
+    "RLChecks": "", 
+    "DOUPDATE": "",
+    "IS_CBFM": 0,
+    "Order_Action": "",
+    "CheckContext": {
+        "Checks": []
+    },
+    "CheckOverrides": []
+}
 
-    attributes = {}
-    for match in attrs_pattern.finditer(event):
-        if match.group("key"):
-            attributes[match.group("key")] = match.group("value")
-        elif match.group("key2"):
-            attributes[match.group("key2")] = float(match.group("value2")) if '.' in match.group("value2") else int(match.group("value2"))
-        elif match.group("key3"):
-            attributes[match.group("key3")] = None
+def parse_request(request_str):
+    order_event = default_values.copy()
+    match = re.findall(r'(\w+): "([^"]+)"', request_str)
+    for key, value in match:
+        order_event[key.strip()] = value.strip()
+    return {"NewOrder": order_event}
 
-    return {
+def create_request(order_events):
+    request = {
         "CheckRequest": {
-            "OrderEventInfos": [
-                {
-                    "NewOrder": {
-                        "RootOrderID": attributes.get("RootOrderID", ""),
-                        "ClordID": attributes.get("ClordID", ""),
-                        "OrigClordID": attributes.get("OrigClordID", ""),
-                        "Instance": "LCETEST01",
-                        "SourceSysCode": attributes.get("SourceSysCode", ""),
-                        "TraderID": attributes.get("TraderID", ""),
-                        "Region": attributes.get("Region", ""),
-                        "TradeDate": attributes.get("TradeDate", ""),
-                        "Trader_Location": attributes.get("Trader_Location", ""),
-                        "Booking_ID": attributes.get("Booking_ID", ""),
-                        "DeskID": attributes.get("DeskID", ""),
-                        "BookingLegalEntityID": attributes.get("BookingLegalEntityID", ""),
-                        "OrderQty": attributes.get("OrderQty", 0),
-                        "Instrument": attributes.get("Instrument", ""),
-                        "Price": attributes.get("Price", 0.0),
-                        "Side": attributes.get("Side", ""),
-                        "Instrument_Type": attributes.get("Instrument_Type", ""),
-                        "Product": attributes.get("Product", ""),
-                        "OrdType": attributes.get("OrdType", ""),
-                        "Capacity": attributes.get("Capacity", ""),
-                        "TimeInForce": attributes.get("TimeInForce", ""),
-                        "FlowType": attributes.get("FlowType", ""),
-                        "Country": attributes.get("Country", ""),
-                        "Currency": attributes.get("Currency", ""),
-                        "RLChecks": attributes.get("RLChecks", ""),
-                        "DOUPDATE": attributes.get("DOUPDATE", ""),
-                        "IS_CBFM": 0 if attributes.get("Is_CBFM") is None else attributes.get("Is_CBFM"),
-                        "Order_Action": attributes.get("Order_Action", ""),
-                        "CheckContext": {
-                            "Checks": []
-                        },
-                        "CheckOverrides": []
-                    }
-                }
-            ]
+            "OrderEventInfos": order_events
         }
     }
+    return json.dumps(request, indent=2)
 
-def parse_log_line(line):
-    pattern = re.compile(
-        r'order_requests: \[(.*)\]',
-        re.DOTALL
-    )
+def process_stream(file_path, batch_size=1000):
+    with open(file_path, 'r') as file:
+        batch = []
+        for line in file:
+            requests = line.split("order_event_uuid")
+            for request_str in requests[1:]:
+                batch.append(parse_request("order_event_uuid" + request_str))
+                if len(batch) >= batch_size:
+                    yield batch
+                    batch = []
+        if batch:
+            yield batch
 
-    match = pattern.search(line)
-    if not match:
-        return None
+def main(file_path):
+    for batch in process_stream(file_path):
+        request_json = create_request(batch)
+        print(request_json)
 
-    order_events = match.group(1).split('}, {')
-    order_event_infos = []
-    for event in order_events:
-        event = event.strip('{').strip('}')
-        parsed_event = parse_order_event(event)
-        if parsed_event:
-            order_event_infos.append(parsed_event)
-
-    return order_event_infos
-
-with open('input.txt', 'r') as file:
-    log_lines = file.readlines()
-
-final_json = []
-for line in log_lines:
-    parsed_lines = parse_log_line(line)
-    if parsed_lines:
-        final_json.extend(parsed_lines)
-
-print(json.dumps(final_json, indent=4))
+if __name__ == "__main__":
+    file_path = "test.txt"
+    main(file_path)
