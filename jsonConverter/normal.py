@@ -3,8 +3,8 @@ import json
 
 default_values = {
     "RootOrderID": "",
-    "ClordID": "",
-    "OrigClordID": "",
+    "ClOrdID": "",
+    "OrigClOrdID": "",
     "Instance": "LCETEST01",
     "SourceSysCode": "",
     "TraderID": "",
