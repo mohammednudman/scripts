@@ -38,10 +38,12 @@ default_values = {
 
 def parse_request(request_str):
     order_event = default_values.copy()
-    match = re.findall(r'(\w+): "([^"]+)"', request_str)
+    match = re.findall(r'(\w+):\s*"([^"]+)"', request_str)
     for key, value in match:
         if key in order_event:
             order_event[key.strip()] = value.strip()
+        elif key == "RISKPARAMS":
+            order_event["CheckContext"]["Checks"] = [val for val in value.split('|') if val]
     return {"NewOrder": order_event}
 
 def parse_file(file_path):
