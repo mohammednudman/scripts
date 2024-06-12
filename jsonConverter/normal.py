@@ -29,22 +29,24 @@ default_values = {
     "RLChecks": "", 
     "DOUPDATE": "",
     "IS_CBFM": 0,
-    "Order_Action": "",
-    "CheckContext": {
-        "Checks": []
-    },
-    "CheckOverrides": []
+    "Order_Action": ""
 }
 
 def parse_request(request_str):
-    order_event = default_values.copy()
+    order_event = {
+        "NewOrder": default_values.copy(),
+        "CheckContext": {
+            "Checks": []
+        },
+        "CheckOverrides": []
+    }
     match = re.findall(r'(\w+):\s*"([^"]+)"', request_str)
     for key, value in match:
-        if key in order_event:
-            order_event[key.strip()] = value.strip()
+        if key in order_event["NewOrder"]:
+            order_event["NewOrder"][key.strip()] = value.strip()
         elif key == "RISKPARAMS":
             order_event["CheckContext"]["Checks"] = [val for val in value.split('|') if val]
-    return {"NewOrder": order_event}
+    return order_event
 
 def parse_file(file_path):
     order_events = []
@@ -66,8 +68,7 @@ def create_request(order_events):
     
     return json.dumps(request, indent=2)
 
-
-file_path = "test.txt"
+file_path = "input.txt"
 order_events = parse_file(file_path)
 request_json = create_request(order_events)
 print(request_json)
