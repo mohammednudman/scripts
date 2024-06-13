@@ -26,38 +26,55 @@ default_values = {
     "FlowType": "",
     "Country": "",
     "Currency": "",
-    "RLChecks": "", 
+    "RLChecks": "",
     "DOUPDATE": "",
     "IS_CBFM": 0,
     "Order_Action": ""
 }
 
+
 def parse_request(request_str):
-    order_event = {
-        "NewOrder": default_values.copy(),
-        "CheckContext": {
-            "Checks": []
-        },
-        "CheckOverrides": []
-    }
-    match = re.findall(r'(\w+):\s*"([^"]+)"', request_str)
-    for key, value in match:
-        if key in order_event["NewOrder"]:
-            order_event["NewOrder"][key.strip()] = value.strip()
-        elif key == "RISKPARAMS":
-            order_event["CheckContext"]["Checks"] = [val for val in value.split('|') if val]
-    return order_event
+    order_events = []
+    matches = re.findall(r'order_event_uuid.*?(?=order_event_uuid|$)', request_str, re.DOTALL)
+
+    for match in matches:
+        order_event = {
+            "CheckContext": {
+                "Checks": []
+            },
+            "CheckOverrides": []
+        }
+        pairs = re.findall(r'(\w+):\s*"([^"]+)"', match)
+        order_event_type = None
+
+        for key, value in pairs:
+            if key == "order_event_type":
+                order_event_type = value.strip()
+                order_event[order_event_type] = default_values.copy()
+            elif order_event_type and key in default_values:
+                order_event[order_event_type][key.strip()] = value.strip()
+            elif key == "RISKPARAMS":
+                order_event["CheckContext"]["Checks"] = [val for val in value.split('|') if val]
+            elif key == "risk_check_override":
+                order_event["CheckOverrides"].append(json.loads(value))
+
+        if order_event_type:
+            order_events.append(order_event)
+
+    return order_events
+
 
 def parse_file(file_path):
-    order_events = []
-    
+    check_requests = []
+
     with open(file_path, 'r') as file:
         for line in file:
-            requests = line.split("order_event_uuid")
-            for request_str in requests[1:]:
-                order_events.append(parse_request("order_event_uuid" + request_str))
-    
-    return order_events
+            if line.strip():
+                order_events = parse_request(line.strip())
+                check_requests.append(create_request(order_events))
+
+    return check_requests
+
 
 def create_request(order_events):
     request = {
@@ -65,10 +82,12 @@ def create_request(order_events):
             "OrderEventInfos": order_events
         }
     }
-    
+
     return json.dumps(request, indent=2)
 
+
 file_path = "input.txt"
-order_events = parse_file(file_path)
-request_json = create_request(order_events)
-print(request_json)
+check_requests = parse_file(file_path)
+
+for request_json in check_requests:
+    print(request_json)
