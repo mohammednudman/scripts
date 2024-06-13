@@ -1,37 +1,6 @@
 import re
 import json
 
-default_values = {
-    "RootOrderID": "",
-    "ClOrdID": "",
-    "OrigClOrdID": "",
-    "Instance": "LCETEST01",
-    "SourceSysCode": "",
-    "TraderID": "",
-    "Region": "",
-    "TradeDate": "",
-    "Trader_Location": "",
-    "Booking_ID": "",
-    "DeskID": "",
-    "BookingLegalEntityID": "",
-    "OrderQty": 0,
-    "Instrument": "",
-    "Price": 0.0,
-    "Side": "",
-    "Instrument_Type": "",
-    "Product": "",
-    "OrdType": "",
-    "Capacity": "",
-    "TimeInForce": "",
-    "FlowType": "",
-    "Country": "",
-    "Currency": "",
-    "RLChecks": "",
-    "DOUPDATE": "",
-    "IS_CBFM": 0,
-    "Order_Action": ""
-}
-
 
 def parse_request(request_str):
     order_events = []
@@ -44,19 +13,37 @@ def parse_request(request_str):
             },
             "CheckOverrides": []
         }
-        pairs = re.findall(r'(\w+):\s*"([^"]+)"', match)
         order_event_type = None
+        attr_vals = {}
 
+        # Extract key-value pairs
+        pairs = re.findall(r'(\w+):\s*"([^"]+)"', match)
         for key, value in pairs:
             if key == "order_event_type":
                 order_event_type = value.strip()
-                order_event[order_event_type] = default_values.copy()
-            elif order_event_type and key in default_values:
-                order_event[order_event_type][key.strip()] = value.strip()
+                order_event[order_event_type] = {}
             elif key == "RISKPARAMS":
                 order_event["CheckContext"]["Checks"] = [val for val in value.split('|') if val]
             elif key == "risk_check_override":
-                order_event["CheckOverrides"].append(json.loads(value))
+                overrides = re.findall(r'{PARAM:\s*(\d+),\s*justification:\s*\'([^\']+)\'}', match)
+                for param, justification in overrides:
+                    order_event["CheckOverrides"].append({
+                        "PARAM": param,
+                        "justification": justification
+                    })
+            elif key == "order_event_attr_vals":
+                # Extract attr_vals content correctly
+                attr_vals_str = match[
+                                match.index("order_event_attr_vals: {") + len("order_event_attr_vals: {"):match.index(
+                                    "}", match.index("order_event_attr_vals: {"))]
+                attr_vals_pairs = re.findall(r'(\w+):\s*([^,}]+)', attr_vals_str)
+                for attr_key, attr_value in attr_vals_pairs:
+                    attr_vals[attr_key.strip()] = attr_value.strip()
+                if order_event_type:
+                    order_event[order_event_type].update(attr_vals)
+            else:
+                if order_event_type:
+                    order_event[order_event_type][key] = value
 
         if order_event_type:
             order_events.append(order_event)
