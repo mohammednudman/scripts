@@ -35,7 +35,14 @@ def parse_request(request_str):
                 override_pairs = re.findall(r'(\w+):\s*("[^"]*"|\S+)', value)
                 override_obj = {}
                 for o_key, o_value in override_pairs:
-                    override_obj[o_key.strip()] = o_value.strip('"')
+                    o_value = o_value.strip('"')
+                    if o_key == "justification":
+                        o_key = "overrideJustification"
+                    elif o_key == "PARAM":
+                        o_key = "Check"
+                    elif o_key == "overrider_sid":
+                        o_key = "overrideSID"
+                    override_obj[o_key.strip()] = o_value
                 order_event["CheckOverrides"].append(override_obj)
             else:
                 if order_event_type:
