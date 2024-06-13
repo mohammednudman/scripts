@@ -15,7 +15,7 @@ def parse_request(request_str):
         order_event_type = None
         attr_vals = {}
 
-        pairs = re.findall(r'(\w+):\s*("[^"]+"|\[.*?\])', match)
+        pairs = re.findall(r'(\w+):\s*("[^"]+"|\d+|\[[^]]*\]|\w+)', match)
         for key, value in pairs:
             if key == "order_event_type":
                 order_event_type = value.strip('"')
@@ -25,7 +25,8 @@ def parse_request(request_str):
             elif key == "order_event_attr_vals":
                 attr_vals_str = match[
                                 match.index("order_event_attr_vals: {") + len("order_event_attr_vals: {"):match.index(
-                                    "}", match.index("order_event_attr_vals: {"))]
+                                    "}", match.index("order_event_attr_vals: {"))
+                                ]
                 attr_vals_pairs = re.findall(r'(\w+):\s*("[^"]+"|\d+)', attr_vals_str)
                 for attr_key, attr_value in attr_vals_pairs:
                     attr_vals[attr_key.strip()] = attr_value.strip('"')
@@ -41,7 +42,7 @@ def parse_request(request_str):
                     elif o_key == "PARAM":
                         o_key = "Check"
                     elif o_key == "overrider_sid":
-                        o_key = "overrideSID"
+                        o_key = "overriderSID"
                     override_obj[o_key.strip()] = o_value
                 order_event["CheckOverrides"].append(override_obj)
             else:
