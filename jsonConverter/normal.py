@@ -1,5 +1,5 @@
+import json
 import re
-
 
 def parse_request(request_str):
     order_events = []
@@ -76,4 +76,5 @@ file_path = "input.txt"
 check_requests = parse_file(file_path)
 
 for request_json in check_requests:
-    print(request_json)
+    json_str = json.dumps(request_json, indent=2)
+    print(json_str)
