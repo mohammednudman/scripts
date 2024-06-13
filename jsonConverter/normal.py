@@ -75,6 +75,11 @@ def create_request(order_events):
 file_path = "input.txt"
 check_requests = parse_file(file_path)
 
-for request_json in check_requests:
-    json_str = json.dumps(request_json, indent=2)
-    print(json_str)
+# Open output file in write mode
+with open("output.txt", "w") as output_file:
+    for request_json in check_requests:
+        # Convert request_json to JSON string
+        json_str = json.dumps(request_json, indent=2)
+        # Write JSON string to output file
+        output_file.write(json_str)
+        output_file.write("\n")  # Add a newline after each JSON object
