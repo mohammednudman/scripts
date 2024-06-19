@@ -65,7 +65,10 @@ def parse_file(file_path):
         for line in file:
             if line.strip():
                 order_events = parse_request(line.strip())
-                check_requests.append(create_request(order_events))
+                request = create_request(order_events)
+                check_requests.append(request)
+                # POST REQUEST CALL
+                # requests.post(Headers, request)
 
     return check_requests
 
