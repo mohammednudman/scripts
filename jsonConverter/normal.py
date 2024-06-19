@@ -1,6 +1,7 @@
 import json
 import re
 
+
 def parse_request(request_str):
     order_events = []
     matches = re.findall(r'{order_event_uuid.*?},\s*]', request_str, re.DOTALL)
@@ -33,18 +34,20 @@ def parse_request(request_str):
                 if order_event_type:
                     order_event[order_event_type].update(attr_vals)
             elif key == "risk_check_overrides":
-                override_pairs = re.findall(r'(\w+):\s*("[^"]*"|\S+)', value)
-                override_obj = {}
-                for o_key, o_value in override_pairs:
-                    o_value = o_value.strip('"')
-                    if o_key == "justification":
-                        o_key = "overrideJustification"
-                    elif o_key == "PARAM":
-                        o_key = "Check"
-                    elif o_key == "overrider_sid":
-                        o_key = "overriderSID"
-                    override_obj[o_key.strip()] = o_value
-                order_event["CheckOverrides"].append(override_obj)
+                override_matches = re.findall(r'\{(.*?)\}', value)
+                for override_match in override_matches:
+                    override_pairs = re.findall(r'(\w+):\s*("[^"]*"|\S+)', override_match)
+                    override_obj = {}
+                    for o_key, o_value in override_pairs:
+                        o_value = o_value.strip('"')
+                        if o_key == "justification":
+                            o_key = "overrideJustification"
+                        elif o_key == "PARAM":
+                            o_key = "Check"
+                        elif o_key == "overrider_sid":
+                            o_key = "overriderSID"
+                        override_obj[o_key.strip()] = o_value
+                    order_event["CheckOverrides"].append(override_obj)
             else:
                 if order_event_type:
                     order_event[order_event_type][key] = value.strip('"')
@@ -80,6 +83,8 @@ def create_request(order_events):
 file_path = "input.txt"
 check_requests = parse_file(file_path)
 
-# Print or write to a file
-for request_json in check_requests:
-    print(json.dumps(request_json, indent=2))
+output_file_path = "output.json"
+with open(output_file_path, 'w') as output_file:
+    json.dump(check_requests, output_file, indent=2)
+
+print(f"Output has been written to {output_file_path}")
