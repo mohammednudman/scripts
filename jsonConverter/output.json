@@ -147,5 +147,452 @@
         }
       ]
     }
+  },
+  {
+    "CheckRequest": {
+      "OrderEventInfos": [
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            },
+            {
+              "Check": "USER_S2QADV",
+              "overriderSID": "I29232534",
+              "overrideJustification": "Ignore L1 Average Daily"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "CheckRequest": {
+      "OrderEventInfos": [
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            },
+            {
+              "Check": "USER_S2QADV",
+              "overriderSID": "I29232534",
+              "overrideJustification": "Ignore L1 Average Daily"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "CheckRequest": {
+      "OrderEventInfos": [
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            },
+            {
+              "Check": "USER_S2QADV",
+              "overriderSID": "I29232534",
+              "overrideJustification": "Ignore L1 Average Daily"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        },
+        {
+          "CheckContext": {
+            "Checks": [
+              "Extended Restricted Security Validator",
+              "Market_Access_Pre_Trade_Control",
+              "USER_PT",
+              "USER_SOV"
+            ]
+          },
+          "CheckOverrides": [
+            {
+              "Check": "USER_SOQADV",
+              "overriderSID": "I298534",
+              "overrideJustification": "Ignore L1 Average Daily Volume Warning"
+            }
+          ],
+          "AmendOrder": {
+            "ClOrdID": "86873949680835",
+            "SourceSysCode": "APOEM",
+            "OrderQty": "54104",
+            "Price": "880",
+            "BookShortName": "1RBZ",
+            "DeskID": "10000216",
+            "BookingLegalEntityID": "0637",
+            "OrdType": "2",
+            "Instrument": "RSER.L",
+            "Side": "2",
+            "BusinessUnit": "EDG",
+            "TraderID": "I298534",
+            "Region": "EMEA",
+            "Venue": "SOR",
+            "Instrument_Type": "Equities",
+            "Product": "Equity",
+            "FlowType": "DMA",
+            "Trader_Location": "GB",
+            "RootOrderID": "C724061000066654169",
+            "Country": "GB",
+            "Casst2": "21629101",
+            "Order_Action": "Route",
+            "RLChecks": "1-ap|1-xa|1-m|1-n|1-k|1-l|1-i|1-g|1-h|1-hk|1-ru|1-o|1-p|1-y|1-x|1-sg|1-mj|1-l|1-af",
+            "DOUPDATE": "FALSE",
+            "ReplayUUID": "417a2123-6c02-4215-b528-95393974ff5a",
+            "Replay_Instance": "Stride_Trading_EMEA_RRP_1",
+            "OrigClOrdID": "968650353050125344"
+          }
+        }
+      ]
+    }
   }
 ]
