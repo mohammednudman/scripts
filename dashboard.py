@@ -38,7 +38,13 @@ app.layout = html.Div([
         html.H2("Table 1", style={'color': '#34495e'}),
         dash_table.DataTable(
             id='table1',
-            columns=[{"name": i, "id": i} for i in ['ts_amps', 'ts_tcp_recv', 'ts_thr_recv', 'ts_converted', 'ts_written']],
+            columns=[
+                {"name": "Amplitude", "id": 'ts_amps'},
+                {"name": "TCP Receive Time", "id": 'formatted_ts_tcp_recv'},
+                {"name": "Threshold Receive", "id": 'ts_thr_recv'},
+                {"name": "Converted Time", "id": 'ts_converted'},
+                {"name": "Written Time", "id": 'ts_written'}
+            ],
             style_table={'overflowX': 'auto'},
             style_cell={
                 'textAlign': 'left',
@@ -63,7 +69,13 @@ app.layout = html.Div([
         html.H2("Table 2", style={'color': '#34495e'}),
         dash_table.DataTable(
             id='table2',
-            columns=[{"name": i, "id": i} for i in ['T2-T1', 'T3-T2', 'T4-T3', 'T5-T4', 'T5-T2']],
+            columns=[
+                {"name": "T2-T1", "id": 'T2-T1'},
+                {"name": "T3-T2", "id": 'T3-T2'},
+                {"name": "T4-T3", "id": 'T4-T3'},
+                {"name": "T5-T4", "id": 'T5-T4'},
+                {"name": "T5-T2", "id": 'T5-T2'}
+            ],
             style_table={'overflowX': 'auto'},
             style_cell={
                 'textAlign': 'left',
@@ -85,11 +97,9 @@ app.layout = html.Div([
     ], style={'margin': '20px', 'padding': '20px', 'backgroundColor': '#ecf0f1', 'borderRadius': '10px'}),
 
     html.Div([
-        html.H2("Histogram", style={'color': '#34495e'}),
-        dcc.Graph(id='histogram', config={'scrollZoom': True})
+        dcc.Graph(id='histogram')
     ], style={'margin': '20px', 'padding': '20px', 'backgroundColor': '#ecf0f1', 'borderRadius': '10px'})
 ])
-
 
 @app.callback(
     [Output('table1', 'data'),
@@ -97,10 +107,9 @@ app.layout = html.Div([
      Output('histogram', 'figure')],
     [Input('date-picker', 'date'),
      Input('start-time', 'value'),
-     Input('end-time', 'value')],
-    [Input('histogram', 'relayoutData')]
+     Input('end-time', 'value')]
 )
-def update_tables(selected_date, start_time, end_time, relayout_data):
+def update_tables(selected_date, start_time, end_time):
     if selected_date:
         file_name = f'{selected_date}.csv'
         file_path = os.path.join('.', file_name)
@@ -108,52 +117,37 @@ def update_tables(selected_date, start_time, end_time, relayout_data):
         if os.path.isfile(file_path):
             df = pd.read_csv(file_path)
 
-            # Strip whitespace and handle empty values
+            df['ts_tcp_recv'] = pd.to_datetime(df['ts_tcp_recv'], errors='coerce')
+
+            df['formatted_ts_tcp_recv'] = df['ts_tcp_recv'].dt.strftime('%H:%M:%S.%f')
+
             start_time = start_time.strip()
             end_time = end_time.strip()
 
             try:
                 if start_time and end_time:
-                    # Convert time strings to time objects
                     start_time = datetime.strptime(start_time, '%H:%M:%S').time()
                     end_time = datetime.strptime(end_time, '%H:%M:%S').time()
 
-                    df['ts_tcp_recv'] = pd.to_datetime(df['ts_tcp_recv'], format='%H:%M:%S.%f').dt.time
-                    df = df[(df['ts_tcp_recv'] >= start_time) & (df['ts_tcp_recv'] <= end_time)]
+                    df = df[(df['ts_tcp_recv'].dt.time >= start_time) & (df['ts_tcp_recv'].dt.time <= end_time)]
             except ValueError:
-                # Handle incorrect time format
-                return [], [], px.histogram()
+                return [], [], go.Figure()
 
-            # Convert ts_tcp_recv to datetime and round to the nearest second
-            df['ts_tcp_recv'] = pd.to_datetime(df['ts_tcp_recv'], format='%H:%M:%S.%f')
+            df['second'] = df['ts_tcp_recv'].dt.floor('S')
 
-            # Define default bin size
-            bin_size = '1s'
+            histogram_data = df.groupby('second').size().reset_index(name='count')
 
-            # Adjust bin size based on zoom level
-            if relayout_data and 'xaxis.range' in relayout_data:
-                xaxis_range = relayout_data['xaxis.range']
-                range_duration = pd.to_datetime(xaxis_range[1]) - pd.to_datetime(xaxis_range[0])
+            fig = px.bar(histogram_data, x='second', y='count', title='Histogram of ts_tcp_recv',
+                        labels={'second': 'Time', 'count': 'Number of Data Points'})
 
-                if range_duration < pd.Timedelta(minutes=1):
-                    bin_size = '1s'
-                elif range_duration < pd.Timedelta(hours=1):
-                    bin_size = '1min'
-                else:
-                    bin_size = '15min'  # You can adjust this to show hours if necessary
-
-            # Generate histogram
-            df['ts_tcp_recv'] = df['ts_tcp_recv'].dt.floor(bin_size)
-            fig = px.histogram(df, x='ts_tcp_recv', title='Histogram of ts_tcp_recv', nbins=30)
-
-            table1_data = df[['ts_amps', 'ts_tcp_recv', 'ts_thr_recv', 'ts_converted', 'ts_written']].to_dict('records')
+            table1_data = df[['ts_amps', 'formatted_ts_tcp_recv', 'ts_thr_recv', 'ts_converted', 'ts_written']].to_dict('records')
             table2_data = df[['T2-T1', 'T3-T2', 'T4-T3', 'T5-T4', 'T5-T2']].to_dict('records')
 
             return table1_data, table2_data, fig
 
         else:
-            return [], [], px.histogram()
-    return [], [], px.histogram()
+            return [], [], go.Figure()
+    return [], [], go.Figure()
 
 if __name__ == '__main__':
     app.run_server(debug=True)
