@@ -27,7 +27,7 @@ def nanoseconds_to_seconds(ns):
 
 def process_event_data(event):
     diffs = [
-        nanoseconds_to_seconds(event[1] - event[0]),
+        nanoseconds_to_seconds(event[1] - event[0]), 
         nanoseconds_to_seconds(event[2] - event[1]),
         nanoseconds_to_seconds(event[3] - event[2]),
         nanoseconds_to_seconds(event[4] - event[3])
@@ -40,10 +40,10 @@ def process_event_data(event):
         "ts_thr_recv": nanoseconds_to_readable(event[2]),
         "ts_converted": nanoseconds_to_readable(event[3]),
         "ts_written": nanoseconds_to_readable(event[4]),
-        "Consecutive Difference 1 (s)": diffs[0],
-        "Consecutive Difference 2 (s)": diffs[1],
-        "Consecutive Difference 3 (s)": diffs[2],
-        "Consecutive Difference 4 (s)": diffs[3],
+        "Consecutive Difference (T2 - T1)": diffs[0],
+        "Consecutive Difference (T3 - T2)": diffs[1],
+        "Consecutive Difference (T4 - T3)": diffs[2],
+        "Consecutive Difference (T5 - T4)": diffs[3],
         "Total Span (T5 - T2) (s)": total_span
     }
 
