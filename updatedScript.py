@@ -61,14 +61,17 @@ def process_event_data(option_emm_id, underlying_emm_id, event):
         "T5-T2": total_span
     }
 
-df = pd.DataFrame()
+def main():
+    data = []
 
-for option_emm_id, underlying_emm_id, event in parse_time_data_in_chunks(file_path, chunk_size):
-    event_data_list = [process_event_data(option_emm_id, underlying_emm_id, event)]
+    for option_emm_id, underlying_emm_id, event in parse_time_data_in_chunks(file_path, chunk_size):
+        event_data = process_event_data(option_emm_id, underlying_emm_id, event)
+        data.append(event_data)
 
-    df_chunk = pd.DataFrame(event_data_list)
-    df = pd.concat([df, df_chunk], ignore_index=True)
+    df = pd.DataFrame(data)
+    df.to_csv(output_file, index=False, float_format='%.9f')
 
-df.to_csv(output_file, index=False, float_format='%.9f')
+    print(f"Data written to {output_file}")
 
-print(f"Data written to {output_file}")
+if __name__ == "__main__":
+    main()
