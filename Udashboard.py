@@ -90,14 +90,6 @@ def load_data(date):
         df['T2_seconds'] = df['T2'].dt.floor('S')
         
         
-        for col in ['T1', 'T2', 'T3', 'T4', 'T5']:
-            df[col] = pd.to_datetime(df[col])
-        df['T5-T4'] = (df['T5'] - df['T4']).dt.total_seconds() * 1e9  
-        df['T4-T3'] = (df['T4'] - df['T3']).dt.total_seconds() * 1e9
-        df['T3-T2'] = (df['T3'] - df['T2']).dt.total_seconds() * 1e9
-        df['T2-T1'] = (df['T2'] - df['T1']).dt.total_seconds() * 1e9
-        df['T5-T2'] = (df['T5'] - df['T2']).dt.total_seconds() * 1e9
-        
         return df
     except FileNotFoundError:
         return pd.DataFrame()  
