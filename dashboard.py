@@ -95,7 +95,7 @@ def load_data(date, chunk_size=500000):
     try:
         df_list = []
         for chunk in pd.read_csv(filename, chunksize=chunk_size):
-            chunk['T2'] = pd.to_datetime(chunk['T2'])
+            chunk['T2'] = pd.to_datetime(chunk['T2'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
             chunk['T2_seconds'] = chunk['T2'].dt.floor('S')
             df_list.append(chunk)
         df = pd.concat(df_list)
