@@ -76,8 +76,8 @@ def main():
         data.append(event_data)
     
     df = pd.DataFrame(data)
-    df = df[["OptionEMMId", "UnderlyingEMMId", "ts_amps", "ts_tcp_recv", "ts_thr_recv", 
-             "ts_converted", "ts_written", "T2-T1", "T3-T2","T4-T3", "T5-T4", "T5-T2", "Insert/Update"]]
+    df = df[["OptionEMMId", "UnderlyingEMMId", "T1", "T2", "T3", 
+             "T4", "T5", "T2-T1", "T3-T2","T4-T3", "T5-T4", "T5-T2", "Insert/Update"]]
     df.to_csv(output_file, index=False, float_format='%.9f')
     print(f"Data written to {output_file}")
 
