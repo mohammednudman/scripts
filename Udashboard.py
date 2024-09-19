@@ -158,7 +158,7 @@ def update_dashboard(selected_date, n_clicks):
                 html.Div([
                     dash_table.DataTable(
                         id='table1',
-                        columns=[{"name": i, "id": i} for i in ['ts_Amps', 'ts_tcp_recv', 'ts_thr_recv', 'ts_converted', 'ts_written']],
+                        columns=[{"name": i, "id": i} for i in ['T1', 'T2', 'T3', 'T4', 'T5']],
                         data=df.to_dict('records'),
                         page_size=5,
                         style_cell={
@@ -186,7 +186,7 @@ def update_dashboard(selected_date, n_clicks):
                 html.Div([
                     dash_table.DataTable(
                         id='table2',
-                        columns=[{"name": i, "id": i} for i in ['T1', 'T2', 'T3', 'T4', 'T5', 'T2-T1', 'T3-T2', 'T4-T3', 'T5-T4', 'T5-T2']],
+                        columns=[{"name": i, "id": i} for i in ['OptionEMMId','UnderlyingEMMId','T2-T1', 'T3-T2', 'T4-T3', 'T5-T4', 'T5-T2', 'Insert/Update']],
                         data=df.to_dict('records'),
                         page_size=5,
                         style_cell={
