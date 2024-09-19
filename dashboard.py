@@ -11,9 +11,8 @@ from flask_caching import Cache
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
 cache = Cache(app.server, config={
-    'CACHE_TYPE': 'FileSystemCache',
-    'CACHE_DIR': '/tmp/flask-cache',
-    'CACHE_DEFAULT_TIMEOUT': 300 # 5 minutes
+    'CACHE_TYPE': 'SimpleCache',
+    'CACHE_DEFAULT_TIMEOUT': 60 * 60 * 24 * 3  # 3 days
 })
 
 app.index_string = '''
@@ -95,8 +94,8 @@ def load_data(date, chunk_size=500000):
     try:
         df_list = []
         for chunk in pd.read_csv(filename, chunksize=chunk_size):
-            chunk['T2'] = pd.to_datetime(chunk['T2'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-            chunk['T2_seconds'] = chunk['T2'].dt.floor('S')
+            chunk['T2'] = pd.to_datetime(chunk['T2'])
+            chunk['T2_seconds'] = chunk['T2'].dt.floor('s')
             df_list.append(chunk)
         df = pd.concat(df_list)
         return df
