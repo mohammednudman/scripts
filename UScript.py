@@ -61,6 +61,7 @@ def process_event_data(option_emm_id, underlying_emm_id, event, seen_keys):
         "T4": nanoseconds_to_readable(event[3]),
         "T5": nanoseconds_to_readable(event[4]),
         "T2-T1": diffs[0],
+        "T3-T2": diffs[1],
         "T4-T3": diffs[2],
         "T5-T4": diffs[3],
         "T5-T2": t5_t2_diff,
@@ -76,7 +77,7 @@ def main():
     
     df = pd.DataFrame(data)
     df = df[["OptionEMMId", "UnderlyingEMMId", "ts_amps", "ts_tcp_recv", "ts_thr_recv", 
-             "ts_converted", "ts_written", "T2-T1", "T4-T3", "T5-T4", "T5-T2", "Insert/Update"]]
+             "ts_converted", "ts_written", "T2-T1", "T3-T2","T4-T3", "T5-T4", "T5-T2", "Insert/Update"]]
     df.to_csv(output_file, index=False, float_format='%.9f')
     print(f"Data written to {output_file}")
 
