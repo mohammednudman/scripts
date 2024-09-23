@@ -3,7 +3,8 @@ from datetime import datetime
 import statistics
 import argparse
 
-def parse_time_data_to_matrix(file_path):
+
+def parse_time_data_to_matrix(file_path, limit_time_ns=None):
     matrix = []
 
     with open(file_path, 'r') as f:
@@ -16,12 +17,18 @@ def parse_time_data_to_matrix(file_path):
             try:
                 option_emm_id = int(parts[0])
                 timestamps = [int(ts) for ts in parts[2:7]]
+                t2 = timestamps[0]
+
+                if limit_time_ns is not None and t2 > limit_time_ns:
+                    break
+
             except ValueError:
                 continue
 
             matrix.append([option_emm_id] + timestamps)
 
     return matrix
+
 
 def compute_latencies(matrix):
     decode_latencies = []
@@ -54,6 +61,7 @@ def compute_latencies(matrix):
         "write_latencies_updates": write_latencies_updates,
     }
 
+
 def calculate_statistics(latencies):
     if latencies:
         return {
@@ -64,8 +72,17 @@ def calculate_statistics(latencies):
         }
     return {"min": None, "max": None, "mean": None, "median": None}
 
-def main(input_file):
-    matrix = parse_time_data_to_matrix(input_file)
+
+def convert_time_to_ns(time_str):
+    time_parts = list(map(int, time_str.split(":")))
+    time_in_seconds = time_parts[0] * 3600 + time_parts[1] * 60 + time_parts[2]
+    return time_in_seconds * 1_000_000_000
+
+
+def main(input_file, time_limit=None):
+    limit_time_ns = convert_time_to_ns(time_limit) if time_limit else None
+
+    matrix = parse_time_data_to_matrix(input_file, limit_time_ns)
     latency_data = compute_latencies(matrix)
 
     stats = {
@@ -83,9 +100,11 @@ def main(input_file):
 
     print(f"Statistics saved to {output_file}.")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process time data file.')
     parser.add_argument('input_file', type=str, help='Path to the input data file')
+    parser.add_argument('-t', '--time', type=str, help='Time limit in HH:MM:SS format (UTC)', default=None)
     args = parser.parse_args()
 
-    main(args.input_file)
+    main(args.input_file, args.time)
