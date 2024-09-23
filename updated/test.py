@@ -17,13 +17,14 @@ def parse_time_data_to_matrix(file_path, limit_time_ns=None):
             try:
                 option_emm_id = int(parts[0])
                 timestamps = [int(ts) for ts in parts[2:7]]
-                t2 = timestamps[0]
+                t2 = timestamps[1]
 
                 t2_readable = datetime.fromtimestamp(t2 / 1_000_000_000, tz=timezone.utc).strftime('%Y-%m-%d %H:%M:%S.%f UTC')
                 print(f"t2 (human-readable): {t2_readable}")
 
-                if limit_time_ns is not None and t2 > limit_time_ns:
-                    break
+                if limit_time_ns is not None:
+                    if (limit_time_ns - t2) > 0:
+                        break
 
             except ValueError:
                 continue
@@ -86,6 +87,7 @@ def convert_time_to_ns(time_str, reference_date):
     time_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S %Z")
 
     epoch_ns = int(time_obj.replace(tzinfo=timezone.utc).timestamp() * 1_000_000_000)
+
     return epoch_ns
 
 
