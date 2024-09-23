@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 import statistics
 import argparse
 
@@ -73,16 +73,47 @@ def calculate_statistics(latencies):
     return {"min": None, "max": None, "mean": None, "median": None}
 
 
-def convert_time_to_ns(time_str):
-    time_parts = list(map(int, time_str.split(":")))
-    time_in_seconds = time_parts[0] * 3600 + time_parts[1] * 60 + time_parts[2]
-    return time_in_seconds * 1_000_000_000
+def extract_date_from_t2(t2_ns):
+    date_obj = datetime.fromtimestamp(t2_ns / 1_000_000_000, tz=timezone.utc)
+    return date_obj.strftime('%Y-%m-%d')
+
+
+def convert_time_to_ns(time_str, reference_date):
+    datetime_str = f"{reference_date} {time_str} UTC"
+    time_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S %Z")
+
+    epoch_ns = int(time_obj.replace(tzinfo=timezone.utc).timestamp() * 1_000_000_000)
+    return epoch_ns
+
+
+def get_first_valid_t2(file_path):
+    with open(file_path, 'r') as f:
+        for line in f:
+            parts = line.split()
+
+            if parts[0] == '*' or all(ts == '0' for ts in parts[2:7]):
+                continue
+
+            try:
+                t2 = int(parts[2])
+                return t2
+            except ValueError:
+                continue
+
+    return None
 
 
 def main(input_file, time_limit=None):
-    limit_time_ns = convert_time_to_ns(time_limit) if time_limit else None
+    limit_time_ns = None
+
+    first_t2 = get_first_valid_t2(input_file)
+
+    if first_t2 is not None and time_limit is not None:
+        reference_date = extract_date_from_t2(first_t2)
+        limit_time_ns = convert_time_to_ns(time_limit, reference_date)
 
     matrix = parse_time_data_to_matrix(input_file, limit_time_ns)
+
     latency_data = compute_latencies(matrix)
 
     stats = {
